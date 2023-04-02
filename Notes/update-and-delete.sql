@@ -3,6 +3,7 @@ DROP TABLE student; -- remove table
 CREATE TABLE student(    
     student_id INT AUTO_INCREMENT,
     name VARCHAR(20) CHARACTER SET utf8mb4 NOT NULL,
+    major VARCHAR(20) DEFAULT 'undecided',
     PRIMARY KEY (student_id)
 );
 
