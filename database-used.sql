@@ -1,23 +1,27 @@
-
 CREATE TABLE employee (
   emp_id INT PRIMARY KEY,
   first_name VARCHAR(40),
   last_name VARCHAR(40),
-  birth_day DATE,
-  sex VARCHAR(1),
+  birth_day DATE, -- (DD-MM,YY)
+  sex VARCHAR(1), -- (F)emale or (M)ale
   salary INT,
-  super_id INT,
-  branch_id INT
+  super_id INT, -- Foreign key
+  branch_id INT -- Foreign key
 );
 
+/* 
+Foreign key 'our column' REFERENCES 'other table -> column'
+ON DELETE SET NULL
+*/
 CREATE TABLE branch (
   branch_id INT PRIMARY KEY,
   branch_name VARCHAR(40),
-  mgr_id INT,
+  mgr_id INT, -- Foreign key
   mgr_start_date DATE,
-  FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL
+  FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL 
 );
 
+-- ALTER TABLE to assign foreign key
 ALTER TABLE employee
 ADD FOREIGN KEY(branch_id)
 REFERENCES branch(branch_id)
@@ -39,7 +43,7 @@ CREATE TABLE works_with (
   emp_id INT,
   client_id INT,
   total_sales INT,
-  PRIMARY KEY(emp_id, client_id),
+  PRIMARY KEY(emp_id, client_id), -- Making two column = PRIMARY KEY -- ON DELETE CASCADE
   FOREIGN KEY(emp_id) REFERENCES employee(emp_id) ON DELETE CASCADE,
   FOREIGN KEY(client_id) REFERENCES client(client_id) ON DELETE CASCADE
 );
@@ -52,15 +56,31 @@ CREATE TABLE branch_supplier (
   FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
 );
 
+-- -----------------------------------------------------------------------------
+
+SELECT * 
+FROM employee;
+
+SELECT * 
+FROM branch;
+
+SELECT * 
+FROM client;
+
+SELECT * 
+FROM works_with;
+
+SELECT * 
+FROM branch_supplier;
 
 -- -----------------------------------------------------------------------------
 
 -- Corporate
-INSERT INTO employee VALUES(100, 'David', 'Wallace', '1967-11-17', 'M', 250000, NULL, NULL);
+INSERT INTO employee VALUES(100, 'David', 'Wallace', '1967-11-17', 'M', 250000, NULL, NULL); -- NULL since the super and branch hasnt been created yet
 
-INSERT INTO branch VALUES(1, 'Corporate', 100, '2006-02-09');
+INSERT INTO branch VALUES(1, 'Corporate', 100, '2006-02-09'); -- create branch 
 
-UPDATE employee
+UPDATE employee -- now we can set David Wallace to branch_id = 1
 SET branch_id = 1
 WHERE emp_id = 100;
 
