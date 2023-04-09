@@ -1,0 +1,40 @@
+-- On Delete
+-- If we delete a row element of one table, it changes the affected row of a different table by setting it to NULL
+
+-- Use set to NULL only if its a FOREIGN KEY
+
+SELECT *
+FROM branch;
+
+DELETE FROM employee
+WHERE emp_id = 102;
+
+SELECT *
+FROM employee;
+
+CREATE TABLE branch (
+  branch_id INT PRIMARY KEY,
+  branch_name VARCHAR(40),
+  mgr_id INT, -- Foreign key
+  mgr_start_date DATE,
+  FOREIGN KEY(mgr_id) REFERENCES employee(emp_id) ON DELETE SET NULL 
+);
+
+-- On Delete cascade
+-- If we delete a row, it deletes all the row that is affected
+
+-- Use CASCADE if its the PRIMARY KEY
+
+CREATE TABLE branch_supplier (
+  branch_id INT,
+  supplier_name VARCHAR(40),
+  supply_type VARCHAR(40),
+  PRIMARY KEY(branch_id, supplier_name),
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE
+);
+
+DELETE FROM branch
+WHERE branch_id = 2;
+
+SELECT *
+FROM branch_supplier
